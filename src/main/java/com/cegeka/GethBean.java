@@ -35,6 +35,6 @@ public class GethBean {
     public void getPeers() {
         ProducerTemplate template = camelContext.createProducerTemplate();
         
-        template.sendBody("direct:geth", "test");
+        template.sendBody("direct:geth", "{\"jsonrpc\":\"2.0\",\"method\":\"net_peerCount\",\"params\":[],\"id\":74}");
     }
 }
