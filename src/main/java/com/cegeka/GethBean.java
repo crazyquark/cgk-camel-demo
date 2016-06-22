@@ -16,6 +16,9 @@
  */
 package com.cegeka;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.ProducerTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,11 +28,13 @@ import org.springframework.stereotype.Component;
  * that we use in the Camel route to lookup this bean.
  */
 @Component("myBean")
-public class SampleBean {
-    private String say = "Hello";
-
-    public String saySomething() {
-        return say;
+public class GethBean {
+    @Autowired
+    CamelContext camelContext;
+    
+    public void getPeers() {
+        ProducerTemplate template = camelContext.createProducerTemplate();
+        
+        template.sendBody("direct:geth", "test");
     }
-
 }
