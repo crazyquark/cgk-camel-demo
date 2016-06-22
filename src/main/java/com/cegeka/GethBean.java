@@ -34,10 +34,12 @@ public class GethBean {
     @Autowired
     CamelContext camelContext;
     
+    private static final String ETH_PEERS_JSON = "{\"jsonrpc\":\"2.0\",\"method\":\"net_peerCount\",\"params\":[],\"id\":74}";
+    
     public void getPeers() {
         ProducerTemplate template = camelContext.createProducerTemplate();
         
-        template.sendBody("direct:geth", "{\"jsonrpc\":\"2.0\",\"method\":\"net_peerCount\",\"params\":[],\"id\":74}");
+        template.sendBody("jms:queue:inbox", ETH_PEERS_JSON);
     }
     
     public void processPeers(String input) {
@@ -45,5 +47,9 @@ public class GethBean {
         GethResponse response = gson.fromJson(input, GethResponse.class);
         
         System.out.println(response);
+    }
+    
+    public void processMessage(String message) {
+        System.out.print(message);
     }
 }

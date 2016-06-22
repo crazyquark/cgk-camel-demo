@@ -14,10 +14,16 @@ public class GethRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("direct:geth")
+            .to("stream:out");
+        
+        from("jms:queue:inbox")
             .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
             .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-            .to("http4://localhost:8545")
-//            .to("stream:out")
+//            .multicast()
+            .to("http4://localhost:8545"/*, "jms:queue:inbox"*/) 
             .bean(gethBean, "processPeers");
+        
+//        from("jms:queue:inbox")
+//            .bean(gethBean, "processMessage");
     }
 }
