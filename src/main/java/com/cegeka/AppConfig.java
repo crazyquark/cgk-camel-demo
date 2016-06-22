@@ -28,7 +28,7 @@ public class AppConfig {
         public void beforeApplicationStart(CamelContext context) {
             // setup the ActiveMQ component
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-            connectionFactory.setBrokerURL("vm://localhost?broker.persistent=false&broker.useJmx=false");
+            connectionFactory.setBrokerURL("peer://group-geth/broker?persitent=false");
 
             // and register it into the CamelContext
             JmsComponent answer = new JmsComponent();

@@ -21,6 +21,10 @@ public class GethRoute extends RouteBuilder {
             .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 //            .multicast()
             .to("http4://localhost:8545"/*, "jms:queue:inbox"*/) 
+            .to("jms:queue:process");
+//            .bean(gethBean, "processPeers");
+        
+        from("jms:queue:process")
             .bean(gethBean, "processPeers");
         
 //        from("jms:queue:inbox")
