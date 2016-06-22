@@ -21,13 +21,15 @@ import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+
 /**
  * A bean that returns a message when you call the {@link #saySomething()} method.
  * <p/>
  * Uses <tt>@Component("myBean")</tt> to register this bean with the name <tt>myBean</tt>
  * that we use in the Camel route to lookup this bean.
  */
-@Component("myBean")
+@Component
 public class GethBean {
     @Autowired
     CamelContext camelContext;
@@ -36,5 +38,12 @@ public class GethBean {
         ProducerTemplate template = camelContext.createProducerTemplate();
         
         template.sendBody("direct:geth", "{\"jsonrpc\":\"2.0\",\"method\":\"net_peerCount\",\"params\":[],\"id\":74}");
+    }
+    
+    public void processPeers(String input) {
+        Gson gson = new Gson();
+        GethResponse response = gson.fromJson(input, GethResponse.class);
+        
+        System.out.println(response);
     }
 }

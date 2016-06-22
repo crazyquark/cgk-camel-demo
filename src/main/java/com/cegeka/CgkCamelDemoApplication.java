@@ -10,8 +10,8 @@ public class CgkCamelDemoApplication {
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(CgkCamelDemoApplication.class, args);
 		
-		GethBean bean = (GethBean)ctx.getBean(GethBean.class);
+		GethBean gethBean = (GethBean)ctx.getBean(GethBean.class);
 		
-		bean.getPeers();
+		gethBean.getPeers();
 	}
 }
