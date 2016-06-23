@@ -7,3 +7,5 @@ services:
     camel2:
         build: .
         command: "-jar /app.jar --send"
+        links:
+            - camel1
