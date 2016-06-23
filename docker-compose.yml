@@ -1,0 +1,16 @@
+ambassador:
+    image: cpuguy83/docker-grand-ambassador
+    volumes:
+         - "/var/run/docker.sock:/docker.sock"
+    command: "-name cgkcameldemo_camel1_1 -name cgkcameldemo_camel2_1"
+         
+camel1:
+    build: .
+    links:
+        - "ambassador:camel1"
+
+camel2:
+    build: .
+    command: "-jar /app.jar --send"
+    links:
+        - "ambassador:camel2"
