@@ -17,6 +17,7 @@
 package com.cegeka;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,13 @@ public class GethBean {
         System.out.println(response);
     }
     
+    public void sendMessage(String message) { 
+        ProducerTemplate template = camelContext.createProducerTemplate();
+        
+        template.sendBody("jms:topic:eth", ExchangePattern.OutOnly, message);
+    }
+    
     public void processMessage(String message) {
-        System.out.print(message);
+        System.out.print("Someone sent me this: " + message);
     }
 }

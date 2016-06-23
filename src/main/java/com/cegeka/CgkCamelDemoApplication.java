@@ -12,6 +12,8 @@ public class CgkCamelDemoApplication {
 		
 		GethBean gethBean = (GethBean)ctx.getBean(GethBean.class);
 		
-		gethBean.getPeers();
+		if (args.length > 0 && args[2].equals("--send")) {
+		    gethBean.sendMessage("Hey there buddy");
+		}
 	}
 }
