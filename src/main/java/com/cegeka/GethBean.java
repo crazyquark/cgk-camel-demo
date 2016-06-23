@@ -17,6 +17,7 @@
 package com.cegeka;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,14 @@ public class GethBean {
     @Autowired
     CamelContext camelContext;
     
+    @Autowired
+    GethRoute gethRoute;
+    
     private static final String ETH_PEERS_JSON = "{\"jsonrpc\":\"2.0\",\"method\":\"net_peerCount\",\"params\":[],\"id\":74}";
     
     public void getPeers() {
         ProducerTemplate template = camelContext.createProducerTemplate();
-        
+
         template.sendBody("jms:queue:inbox", ETH_PEERS_JSON);
     }
     
@@ -53,10 +57,11 @@ public class GethBean {
     public void sendMessage(String message) { 
         ProducerTemplate template = camelContext.createProducerTemplate();
         
-        template.sendBody("jms:topic:eth", ExchangePattern.OutOnly, message);
+        template.sendBodyAndHeader("jms:topic:eth", ExchangePattern.OutOnly, message, "uuid", gethRoute.getUUID());
     }
     
-    public void processMessage(String message) {
+    public void processMessage(String message, Exchange exchange) {
+
         System.out.print("Someone sent me this: " + message);
     }
 }

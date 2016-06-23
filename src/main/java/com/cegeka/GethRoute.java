@@ -3,14 +3,20 @@ package com.cegeka;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.JdkIdGenerator;
  
 @Component
 public class GethRoute extends RouteBuilder {
     @Autowired
     private GethBean gethBean;
     
+    private String UUID;
+    
     @Override
     public void configure() throws Exception {
+        JdkIdGenerator generator = new JdkIdGenerator();
+        this.UUID = generator.generateId().toString();
+        
         from("direct:geth")
             .to("stream:out");
         
@@ -29,6 +35,11 @@ public class GethRoute extends RouteBuilder {
 ////            .bean(gethBean, "processMessage");
         
         from("jms:topic:eth")
+            .filter(header("uuid").isNotEqualTo(this.UUID.toString()))
             .bean(gethBean, "processMessage");
+    }
+    
+    public String getUUID() {
+        return this.UUID;
     }
 }
