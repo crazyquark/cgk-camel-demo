@@ -3,9 +3,12 @@ version: '2'
 services:
     camel1:
         build: .
-
     camel2:
         build: .
         command: "-jar /app.jar --send"
+        links:
+            - camel1
+    camel3:
+        build: .
         links:
             - camel1
