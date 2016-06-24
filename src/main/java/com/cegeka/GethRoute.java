@@ -38,7 +38,7 @@ public class GethRoute extends RouteBuilder {
             .filter(header("uuid").isNotEqualTo(this.UUID.toString()))
             .bean(gethBean, "processMessage");
         
-        from("timer:sender?period=2000")
+        from("timer:sender?period=100")
             .bean(gethBean, "sendMessage");
     }
     

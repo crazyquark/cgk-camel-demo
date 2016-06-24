@@ -16,6 +16,8 @@
  */
 package com.cegeka;
 
+import java.util.Date;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
@@ -65,6 +67,9 @@ public class GethBean {
             return;
         }
         
+        Date now = new Date();
+        System.out.println("[" + now.toString() + "]Sending to all!");
+        
         ProducerTemplate template = camelContext.createProducerTemplate();
         
         template.sendBodyAndHeader("jms:topic:eth", ExchangePattern.InOnly , "Hey there buddy!\n", "uuid", gethRoute.getUUID());
@@ -73,7 +78,8 @@ public class GethBean {
     }
     
     public void processMessage(String message, Exchange exchange) {
-
-        System.out.print("Someone sent me this: " + message);
+        Date now = new Date();
+        
+        System.out.print("[" + now.toString() + "]Someone sent me this: " + message);
     }
 }

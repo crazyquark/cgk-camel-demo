@@ -1,3 +1,3 @@
 alias dc='docker-compose'
-dc down | true && mvn clean && mvn package && dc build --no-cache
+d-c down | true && mvn clean && mvn package && d-c build --no-cache
 
