@@ -27,13 +27,13 @@ public class AppConfig {
         
         @Override
         public void beforeApplicationStart(CamelContext context) {
+            // A unique ID for the embedded broker
             JdkIdGenerator uuidGen = new JdkIdGenerator();
             String uuid = uuidGen.generateId().toString();
             
             // setup the ActiveMQ component
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
             connectionFactory.setBrokerURL("peer://group-geth/broker-" + uuid + "?persistent=false");
-            connectionFactory.setClientID(uuid);
 
             // and register it into the CamelContext
             JmsComponent answer = new JmsComponent();

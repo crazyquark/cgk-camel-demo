@@ -5,10 +5,19 @@ services:
         build: .
     camel2:
         build: .
-        command: "-jar /app.jar --send"
+        command: "-jar /app.jar a b --send"
         links:
             - camel1
     camel3:
         build: .
         links:
             - camel1
+    camel4:
+        build: .
+        links:
+            - camel1
+    camel5:
+        build: .
+        links:
+            - camel1
+

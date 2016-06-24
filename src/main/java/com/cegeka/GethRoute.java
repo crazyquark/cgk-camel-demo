@@ -34,9 +34,12 @@ public class GethRoute extends RouteBuilder {
 ////        from("jms:queue:inbox")
 ////            .bean(gethBean, "processMessage");
         
-        from("jms:topic:eth")
+        from("jms:topic:eth?exchangePattern=InOnly")
             .filter(header("uuid").isNotEqualTo(this.UUID.toString()))
             .bean(gethBean, "processMessage");
+        
+        from("timer:sender?period=2000")
+            .bean(gethBean, "sendMessage");
     }
     
     public String getUUID() {

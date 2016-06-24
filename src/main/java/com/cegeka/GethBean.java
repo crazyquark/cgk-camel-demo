@@ -39,7 +39,13 @@ public class GethBean {
     @Autowired
     GethRoute gethRoute;
     
+    private boolean enableSender = false;
+    
     private static final String ETH_PEERS_JSON = "{\"jsonrpc\":\"2.0\",\"method\":\"net_peerCount\",\"params\":[],\"id\":74}";
+    
+    public void enableSender() {
+        this.enableSender = true;
+    }
     
     public void getPeers() {
         ProducerTemplate template = camelContext.createProducerTemplate();
@@ -54,10 +60,16 @@ public class GethBean {
         System.out.println(response);
     }
     
-    public void sendMessage(String message) { 
+    public void sendMessage() throws Exception { 
+        if (!enableSender) {
+            return;
+        }
+        
         ProducerTemplate template = camelContext.createProducerTemplate();
         
-        template.sendBodyAndHeader("jms:topic:eth", ExchangePattern.OutOnly, message, "uuid", gethRoute.getUUID());
+        template.sendBodyAndHeader("jms:topic:eth", ExchangePattern.InOnly , "Hey there buddy!\n", "uuid", gethRoute.getUUID());
+        
+        template.stop();
     }
     
     public void processMessage(String message, Exchange exchange) {

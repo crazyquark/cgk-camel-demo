@@ -82,6 +82,12 @@
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-broker</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-kahadb-store -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-kahadb-store</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
