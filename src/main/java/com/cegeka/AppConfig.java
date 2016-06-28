@@ -34,11 +34,12 @@ public class AppConfig {
             // setup the ActiveMQ component
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
             connectionFactory.setBrokerURL("peer://group-geth/broker-" + uuid + "?persistent=false");
-
+            connectionFactory.setTrustAllPackages(true);
+            
             // and register it into the CamelContext
             JmsComponent answer = new JmsComponent();
             answer.setConnectionFactory(connectionFactory);
-            
+
             camelContext.addComponent("jms", answer);
         }
         
