@@ -1,0 +1,2 @@
+# Configure protocol class for peer2://
+class=com.cegeka.activemq.transport.peer2.Peer2TransportFactory

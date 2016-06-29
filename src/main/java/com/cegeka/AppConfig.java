@@ -33,7 +33,7 @@ public class AppConfig {
             
             // setup the ActiveMQ component
             ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-            connectionFactory.setBrokerURL("peer://group-geth/broker-" + uuid + "?persistent=false");
+            connectionFactory.setBrokerURL("peer2://group-geth/broker-" + uuid + "?persistent=false");
             connectionFactory.setTrustAllPackages(true);
             
             // and register it into the CamelContext
