@@ -80,6 +80,6 @@ public class GethBean {
     public void processMessage(Message message, Exchange exchange) {
         Date now = new Date();
         
-        System.out.print("[" + now.toString() + "]Someone sent me this: " + message);
+        System.out.print("[" + now.toString() + "]Someone sent me this: " + message + "\n");
     }
 }

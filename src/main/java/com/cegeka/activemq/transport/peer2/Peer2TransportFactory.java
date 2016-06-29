@@ -22,9 +22,10 @@ import org.apache.activemq.util.URISupport;
 
 public class Peer2TransportFactory extends TransportFactory {
 
-    public static final ConcurrentMap BROKERS = new ConcurrentHashMap();
-    public static final ConcurrentMap CONNECTORS = new ConcurrentHashMap();
-    public static final ConcurrentMap SERVERS = new ConcurrentHashMap();
+    public static final ConcurrentMap<?, ?> BROKERS = new ConcurrentHashMap<Object, Object>();
+    public static final ConcurrentMap<?, ?> CONNECTORS = new ConcurrentHashMap<Object, Object>();
+    public static final ConcurrentMap<?, ?> SERVERS = new ConcurrentHashMap<Object, Object>();
+    
     private static final IdGenerator ID_GENERATOR = new IdGenerator("peer-");
 
     @Override
@@ -60,7 +61,9 @@ public class Peer2TransportFactory extends TransportFactory {
             if (!brokerOptions.containsKey("persistent")) {
                 brokerOptions.put("persistent", "false");
             }
-
+            
+            final Integer port = brokerOptions.containsKey("port") ? Integer.parseInt(brokerOptions.get("port")) : 0;
+            
             final URI finalLocation = new URI("vm://" + broker);
             final String finalBroker = broker;
             final String finalGroup = group;
@@ -81,7 +84,7 @@ public class Peer2TransportFactory extends TransportFactory {
                     BrokerService service = new BrokerService();
                     IntrospectionSupport.setProperties(service, brokerOptions);
                     service.setBrokerName(finalBroker);
-                    TransportConnector c = service.addConnector("tcp://0.0.0.0:0");
+                    TransportConnector c = service.addConnector("tcp://0.0.0.0:" + port);
                     c.setDiscoveryUri(new URI("multicast://default?group=" + finalGroup));
                     service.addNetworkConnector("multicast://default?group=" + finalGroup);
                     return service;
