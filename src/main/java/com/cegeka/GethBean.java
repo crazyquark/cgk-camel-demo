@@ -16,11 +16,17 @@
  */
 package com.cegeka;
 
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
+import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -75,6 +81,53 @@ public class GethBean {
         template.sendBodyAndHeader("jms:topic:eth", ExchangePattern.InOnly , new Message("Hey there, little buddy!"), "uuid", gethRoute.getUUID());
         
         template.stop();
+    }
+    
+    public void createPdf(Object receiver, String methodName) throws Exception {
+    	ProducerTemplate template = camelContext.createProducerTemplate();
+    		    
+    	template.send("direct:pdf", new Processor() {
+			
+			@Override
+			public void process(Exchange exchange) throws Exception {
+				exchange.getIn().setBody("This is a PDF!\n");
+				
+				exchange.setProperty("receiver", receiver);
+				exchange.setProperty("method", methodName);
+			}
+		});
+    	
+    	template.stop();
+    }
+    
+    public void processPdf(OutputStream pdf, Exchange exchange) {
+    	Object receiver = exchange.getProperty("receiver");
+    	String methodName = (String) exchange.getProperty("method");
+    	
+    	try {
+			Method method = receiver.getClass().getMethod(methodName, OutputStream.class);
+			
+			method.invoke(receiver, pdf);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public void printPdf(OutputStream pdf){
+    	System.out.println(pdf);
     }
     
     public void processMessage(Message message, Exchange exchange) {

@@ -15,5 +15,12 @@ public class CgkCamelDemoApplication {
 		if (args.length > 1 && args[2].equals("--send")) {
 		    gethBean.enableSender();
 		}
+		
+		try {
+			gethBean.createPdf(gethBean, "printPdf");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

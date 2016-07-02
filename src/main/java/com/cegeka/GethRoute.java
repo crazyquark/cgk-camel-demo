@@ -1,5 +1,7 @@
 package com.cegeka;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,10 @@ public class GethRoute extends RouteBuilder {
         
         from("direct:geth")
             .to("stream:out");
+        
+        from("direct:pdf")
+        	.to("pdf:create")
+        	.bean(gethBean, "processPdf");
         
 //        from("jms:queue:inbox")
 //            .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.POST))
